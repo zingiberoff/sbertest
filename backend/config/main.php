@@ -10,8 +10,15 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'bootstrap' => ['log'],
-    'modules' => [],
+    'bootstrap' => ['debug', 'gii', 'log'],
+    'modules' => [
+        'gii' => [
+            'class' => 'yii\gii\Module',
+        ],
+        'debug' => [
+            'class' => 'yii\debug\Module',
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
