@@ -18,9 +18,9 @@ use yii\widgets\ActiveForm;
         ]);
     ?>
 
-    <?= $form->field($model, 'name')->textarea(['maxlength' => true]) ?>
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'descrpion')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'descrpion')->textarea(['maxlength' => true]) ?>
     <div id="image">
         <? if ($model->image) { ?>
 
