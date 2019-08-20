@@ -1,10 +1,12 @@
 <?php
 
-use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\widgets\LinkPager;
 
 /* @var $this yii\web\View */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $dataProvider \yii\elasticsearch\ActiveDataProvider */
+/* @var $pages yii\data\Pagination */
 
 $this->title = 'Items';
 $this->params['breadcrumbs'][] = $this->title;
@@ -17,21 +19,20 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Items', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
+            'primarykey',
             'name',
             'descrpion',
             'image',
-            'view_count',
-            //'timestamp',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
+        'pager' => [
+            'pagination' => $dataProvider->pagination,
+        ]
+
     ]); ?>
 
 

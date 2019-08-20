@@ -2,26 +2,17 @@
 
 namespace common\models;
 
-use \yii\db\ActiveRecord;
+use yii\elasticsearch\ActiveRecord;
 
-/**
- * This is the model class for table "items".
- *
- * @property int $id
- * @property string $name
- * @property string $descrpion
- * @property string $image
- * @property int $view_count
- * @property string $timestamp
- */
 class Items extends ActiveRecord
 {
+
     /**
-     * {@inheritdoc}
+     * @return array Сопоставление для этой модели
      */
-    public static function tableName()
+    public function attributes()
     {
-        return 'items';
+        return ['_id', 'name', 'descrpion', 'image'];
     }
 
     /**
@@ -37,6 +28,7 @@ class Items extends ActiveRecord
         ];
     }
 
+
     /**
      * {@inheritdoc}
      */
@@ -50,4 +42,6 @@ class Items extends ActiveRecord
                                          но в рамках данной задачи это не нужно*/
         ];
     }
+
+
 }

@@ -2,12 +2,15 @@
 
 namespace backend\controllers;
 
+use common\dataprovider\ActiveDataProvider;
 use common\models\Image;
 use common\models\Items;
-use yii\data\ActiveDataProvider;
+use Yii;
+use yii\data\Pagination;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+
 
 /**
  * ItemsController implements the CRUD actions for Items model.
@@ -35,16 +38,22 @@ class ItemsController extends Controller
      */
     public function actionIndex()
     {
+
+        $query = Items::find();
+        $totalCount = $query->count()['value'];
+        $pages = new Pagination(['totalCount' => $totalCount, 'pageSize' => 10]);
+        $query = $query->offset($pages->offset)
+            ->limit($pages->limit);
         $dataProvider = new ActiveDataProvider([
-            'query' => Items::find(),
+            'query' => $query,
+            'pagination' => $pages
         ]);
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
+
+        return $this->render('index', compact('dataProvider'));
     }
 
-    /**
+    /**search_type=count
      * Displays a single Items model.
      * @param integer $id
      * @return mixed
@@ -52,8 +61,9 @@ class ItemsController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -86,7 +96,7 @@ class ItemsController extends Controller
             $image = new Image();
             $model->image = $image->upload($model);
             if ($model->save() && $model->image) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->primaryKey]);
             }
         }
 
@@ -111,7 +121,7 @@ class ItemsController extends Controller
                 $model->image = $imagePath;
             }
             if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->primaryKey]);
             }
         }
         return $this->render('update', [
@@ -129,7 +139,7 @@ class ItemsController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        usleep(300);
         return $this->redirect(['index']);
     }
 }
