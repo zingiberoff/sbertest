@@ -30,9 +30,8 @@ class Items extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'descrpion'], 'required'],
-            [['view_count'], 'integer'],
-            [['timestamp'], 'safe'],
+            [['name', 'descrpion'], 'required', 'message' => 'Поле {attribute} не заполнено'],
+            ['image', 'required', 'message' => 'Файл не загружен или имеет неверный формат'],
             [['name', 'image'], 'string', 'max' => 255],
             [['descrpion'], 'string', 'max' => 1024],
         ];
@@ -44,12 +43,11 @@ class Items extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'primaryKey' => "ID",
             'name' => 'Name',
             'descrpion' => 'Descrpion',
-            'image' => 'Image',
-            'view_count' => 'View Count',
-            'timestamp' => 'Timestamp',
+            'image' => 'Image', /* TODO: Файлы стоит вынести в отдельную таблицу,
+                                         но в рамках данной задачи это не нужно*/
         ];
     }
 }

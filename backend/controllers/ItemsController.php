@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use Yii;
+use common\models\Image;
 use common\models\Items;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -82,8 +82,12 @@ class ItemsController extends Controller
     {
         $model = new Items();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $image = new Image();
+            $model->image = $image->upload($model);
+            if ($model->save() && $model->image) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('create', [
@@ -101,11 +105,15 @@ class ItemsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $image = new Image();
+            if ($imagePath = $image->upload($model)) {
+                $model->image = $imagePath;
+            }
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
-
         return $this->render('update', [
             'model' => $model,
         ]);
