@@ -10,22 +10,35 @@ use yii\widgets\ActiveForm;
 
 <div class="items-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(
+        [
+            'options' => [
+                'enctype' => 'multipart/form-data'
+            ],
+        ]);
+    ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'name')->textarea(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'descrpion')->textInput(['maxlength' => true]) ?>
+    <div id="image">
+        <? if ($model->image) { ?>
 
-    <?= $form->field($model, 'image')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'view_count')->textInput() ?>
-
-    <?= $form->field($model, 'timestamp')->textInput() ?>
-
+            <img src="<?= $model->image ?>" alt="<? $model->name ?>" height="200">
+            <div onclick="deleteImage()" class="btn btn-danger">Удалить</div>
+        <? } else { ?>
+            <?= $form->field($model, 'image')->fileInput() ?>
+        <? } ?>
+    </div>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
+    <script>
+        function deleteImage() {
+            document.getElementById('image').innerHTML = `<?= $form->field($model, 'image')->fileInput() ?>`;
+        }
+    </script>
 
 </div>
