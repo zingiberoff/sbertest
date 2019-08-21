@@ -9,14 +9,16 @@ services:
     ports:
       - "80:80"
   php:
-    image: php:7.2-fpm-alpine
+    build: ./docker/php/build
     volumes:
       - ./:/www:rw
 
     working_dir: /www/
 
   mysql:
-    image: mysql:5.7
+    image: mysql
+    ports:
+      - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=verysecretpass
       - MYSQL_DATABASE=yii2advanced
