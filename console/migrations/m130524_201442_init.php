@@ -1,5 +1,6 @@
 <?php
 
+use common\models\User as User;
 use yii\db\Migration;
 
 class m130524_201442_init extends Migration
@@ -7,6 +8,7 @@ class m130524_201442_init extends Migration
     public function up()
     {
         $tableOptions = null;
+
         if ($this->db->driverName === 'mysql') {
             // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
@@ -24,6 +26,12 @@ class m130524_201442_init extends Migration
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);
+        $user = new User();
+        $user->username = 'admin';
+        $user->email = 'jarchem91@gmail.com';
+        $user->status = 10;
+        $user->setPassword('1qaz2wsx');
+        $user->save();
     }
 
     public function down()
